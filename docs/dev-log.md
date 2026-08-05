@@ -1,10 +1,8 @@
 # Development Log
 
----
+------------------------------------------------------------------
 
-## 2026-08-05
-
-### Expression Calculator Interface
+## 2026-08-05  -  Expression Calculator Interface
 
 This milestone marks the transition from a traditional desktop calculator layout to an expression-oriented calculator intended for parsing and evaluating complete mathematical expressions.
 
@@ -96,3 +94,68 @@ Initial goals:
 - Parser
 - Expression evaluator
 
+------------------------------------------------------------------
+
+## 2026-08-05  -  JavaScript Application Structure
+
+The calculator project has moved from a static interface into an initialized JavaScript application.
+
+### Development Environment
+
+Configured the project to run through a local development server.
+
+The application is now loaded through HTTP instead of directly opening the HTML file through the file system. This allows JavaScript modules to function correctly and better matches the workflow that will be used for future development.
+
+### Initial Module Architecture
+
+Created the initial JavaScript module structure:
+
+- main.js
+    - Application entry point
+    - Initializes calculator components
+
+- calculator.js
+    - Owns calculator state
+    - Will manage expression data, cursor position, and results
+
+- ui.js
+    - Responsible for updating the display
+    - Separates rendering logic from calculator logic
+
+- input.js
+    - Responsible for handling user input
+    - Will unify button and keyboard interactions
+
+- parser.js
+    - Reserved for future tokenizer, parser, and evaluator logic
+
+### Design Direction
+
+The project will follow a modular monolith approach.
+
+The application will avoid tightly coupling UI elements with calculator behavior. Instead, inputs will eventually be converted into actions that modify calculator state, with the UI rendering the current state.
+
+Planned data flow:
+
+Input
+↓
+Action Handler
+↓
+Calculator State
+↓
+UI Renderer
+
+### Current Status
+
+The application successfully loads JavaScript modules and initializes the calculator.
+
+The calculator does not yet modify expressions or calculate results.
+
+### Next Milestone
+
+Implement the first working interaction loop:
+
+- Button press detection
+- Passing button actions into calculator state
+- Updating the expression display
+- Creating the first usable expression editor behavior
