@@ -234,4 +234,40 @@ Next Steps:
 
 Connect standardized actions to calculator logic and begin modifying the expression token state.
 
+------------------------------------------------------------------
 
+Milestone 05 — Unified Input Layer
+Summary
+Completed the first version of the calculator input system. Mouse interaction and keyboard shortcuts now share a common input pipeline, allowing multiple input methods to generate the same calculator actions.
+
+Changes
+Added keyboard support for:
+Number keys (top row and numeric keypad)
+Arithmetic operators (+, -, *, /)
+Parentheses
+Exponent (^)
+Enter (Evaluate)
+Backspace/Delete
+Left and Right Arrow keys
+Escape (Clear)
+Prevented default browser behavior for recognized calculator keys.
+Standardized button actions using data-action attributes.
+Normalized mouse and keyboard input into a common action object before calculator processing.
+Design Decisions
+The calculator treats the keyboard as an alternative way of pressing calculator buttons rather than as a separate text-entry system.
+
+All supported input methods now converge into a single action pipeline:
+
+Mouse Click
+        \
+         \
+          → Input Normalizer → Action Object → Calculator Logic
+         /
+Keyboard
+
+This separation keeps calculator logic independent of the physical input source and provides a foundation for future features such as macros, saved calculation sequences, or additional input methods.
+
+Next Steps
+Connect normalized actions to the calculator state manager.
+Begin implementing expression editing using the token-based expression model.
+Update the expression and result displays from calculator state rather than console output.

@@ -31,7 +31,7 @@ class Input {
 
                     const action = {
 
-                        type: "INSERT",
+                        type: "BUTTON_PRESS",
 
                         value: button.dataset.action
 
@@ -79,98 +79,38 @@ translateKey(event){
     const key = event.key;
 
 
-    // Evaluation
-    if(key === "Enter"){
+    const keyMap = {
+
+        "Enter": "ENTER",
+
+        "Backspace": "DELETE",
+
+        "Delete": "DELETE",
+
+        "ArrowLeft": "LEFT",
+
+        "ArrowRight": "RIGHT",
+
+        "Escape": "CLEAR"
+
+    };
+
+
+    if(keyMap[key]){
 
         return {
 
             type:"BUTTON_PRESS",
 
-            value:"ENTER"
+            value:keyMap[key]
 
         };
 
     }
 
 
-    // Delete last entry
-    if(key === "Backspace" || key === "Delete"){
-
-        return {
-
-            type:"BUTTON_PRESS",
-
-            value:"DELETE"
-
-        };
-
-    }
-
-
-    // Cursor movement
-    if(key === "ArrowLeft"){
-
-        return {
-
-            type:"BUTTON_PRESS",
-
-            value:"LEFT"
-
-        };
-
-    }
-
-
-    if(key === "ArrowRight"){
-
-        return {
-
-            type:"BUTTON_PRESS",
-
-            value:"RIGHT"
-
-        };
-
-    }
-
-    if(key === "Escape"){
-
-        return {
-
-            type:"BUTTON_PRESS",
-
-            value:"CLEAR"
-
-        };
-
-    }
-
-    // Numbers
-    if("0123456789".includes(key)){
-
-        return {
-
-            type:"BUTTON_PRESS",
-
-            value:key
-
-        };
-
-    }
-
-
-
-    // Operators and parentheses
     if(
-        [
-            "+",
-            "-",
-            "*",
-            "/",
-            "^",
-            "(",
-            ")"
-        ].includes(key)
+        "0123456789+-*/^()".includes(key)
     ){
 
         return {
@@ -184,11 +124,9 @@ translateKey(event){
     }
 
 
+    return null;
 
-
-        return null;
-
-    }
+}
 
 
 
