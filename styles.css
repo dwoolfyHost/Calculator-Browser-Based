@@ -262,6 +262,53 @@ button:active {
     transform: translateY(1px);
 }
 
+/* ----------------------------------
+   Button Categories
+-----------------------------------*/
+
+button.operator {
+    font-weight: 600;
+}
+
+button.function {
+
+    background: linear-gradient(
+        to bottom,
+        #f7fbff,
+        #d8ebff
+    );
+}
+
+button.edit {
+
+    background: linear-gradient(
+        to bottom,
+        #fff9ef,
+        #f2dba6
+    );
+}
+
+button.equals {
+
+    background: linear-gradient(
+        to bottom,
+        #dff8d7,
+        #9dd88d
+    );
+
+    font-weight: bold;
+}
+
+button.clear {
+
+    background: linear-gradient(
+        to bottom,
+        #ffe8e8,
+        #efb2b2
+    );
+
+    font-weight: 600;
+}
 
 .zero {
 

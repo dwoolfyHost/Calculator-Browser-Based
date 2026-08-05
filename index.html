@@ -18,11 +18,11 @@
         </div>
 
         <div class="expression-display">
-            <div class="expression"></div>
+            <div id="expression" class="expression"></div>
         </div>
 
         <div class="display">
-            <div class="result">0</div>
+            <div id="result" class="result">0</div>
         </div>
 
     </div>
@@ -30,46 +30,46 @@
     <div class="button-grid">
 
         <!-- Row 1 -->
-        <button>MC</button>
-        <button>MR</button>
-        <button>MS</button>
-        <button>M+</button>
-        <button>M-</button>
+        <button class="clear" data-action="clear">Clear</button>
+        <button class="edit" data-action="delete">Del</button>
+        <button class="edit" data-action="left">←</button>
+        <button class="edit" data-action="right">→</button>
+        <button class="operator" data-action="%">%</button>
 
         <!-- Row 2 -->
-        <button>←</button>
-        <button>CE</button>
-        <button>C</button>
-        <button>±</button>
-        <button>√</button>
+        <button class="operator" data-action="(">(</button>
+        <button class="operator" data-action=")">)</button>
+        <button class="operator" data-action="^">^</button>
+        <button class="function" data-action="pi">π</button>
+        <button class="function" data-action="e">e</button>
 
         <!-- Row 3 -->
-        <button>7</button>
-        <button>8</button>
-        <button>9</button>
-        <button>/</button>
-        <button>%</button>
+        <button data-action="7">7</button>
+        <button data-action="8">8</button>
+        <button data-action="9">9</button>
+        <button class="operator" data-action="/">/</button>
+        <button class="function" data-action="log">log</button>
 
         <!-- Row 4 -->
-        <button>4</button>
-        <button>5</button>
-        <button>6</button>
-        <button>*</button>
-        <button>1/x</button>
+        <button data-action="4">4</button>
+        <button data-action="5">5</button>
+        <button data-action="6">6</button>
+        <button class="operator" data-action="*">*</button>
+        <button class="function" data-action="ln">ln</button>
 
         <!-- Row 5 -->
-        <button>1</button>
-        <button>2</button>
-        <button>3</button>
-        <button>-</button>
-        <button>=</button>
+        <button data-action="1">1</button>
+        <button data-action="2">2</button>
+        <button data-action="3">3</button>
+        <button class="operator" data-action="-">-</button>
+        <button class="equals" data-action="=">=</button>
 
         <!-- Row 6 -->
-        <button class="zero">0</button>
-        <button>.</button>
-        <button>+</button>
+        <button class="zero" data-action="0">0</button>
+        <button data-action=".">.</button>
+        <button class="operator" data-action="+">+</button>
 
-    </div>
+</div>
 
 </div>
 
