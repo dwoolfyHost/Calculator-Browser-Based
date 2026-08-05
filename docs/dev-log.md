@@ -159,3 +159,79 @@ Implement the first working interaction loop:
 - Passing button actions into calculator state
 - Updating the expression display
 - Creating the first usable expression editor behavior
+
+------------------------------------------------------------------
+
+# Milestone 03 — Expression Input Pipeline
+
+## Changes
+
+Connected calculator button events to the calculator state system.
+
+Buttons now generate actions that are passed through the input processor and into the calculator logic.
+
+The calculator now converts incoming values into token objects rather than storing raw characters.
+
+## Technical Notes
+
+The current pipeline is:
+
+Button
+→ Input Processor
+→ Calculator State
+→ Token Storage
+
+The UI display is intentionally not connected yet.
+
+## Next Steps
+
+Implement expression rendering so the stored token state is reflected in the expression display.
+
+------------------------------------------------------------------
+
+Milestone 04 — Input Normalization
+
+Summary:
+
+Completed the first stage of the calculator input system.
+
+Mouse button presses and keyboard input are now converted into a shared action format before reaching calculator logic.
+
+Implemented:
+
+- Keyboard number input
+- Keyboard operator input
+- Parentheses input
+- Power operator input
+- Enter key mapping for evaluation
+- Delete and Backspace mapping
+- Left and Right arrow mapping
+- Escape key mapping for clear/reset
+- Browser default behavior prevention for calculator-controlled keys
+
+Design Decisions:
+
+Input sources are intentionally separated from calculator behavior.
+
+The calculator does not know whether an action originated from:
+- a mouse click
+- a keyboard press
+- future macro/script input
+
+All sources produce standardized BUTTON_PRESS actions.
+
+Current pipeline:
+
+Physical Input
+    ↓
+Input Normalizer
+    ↓
+Action Object
+    ↓
+Calculator State (next phase)
+
+Next Steps:
+
+Connect standardized actions to calculator logic and begin modifying the expression token state.
+
+
