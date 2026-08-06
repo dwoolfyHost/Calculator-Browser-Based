@@ -527,3 +527,128 @@ Connect calculator expression state to the expression display
 Begin rendering the editable expression in the UI
 
 ------------------------------------------------------------------
+
+Milestone 08 — Internal Symbol Registry
+Summary
+
+Introduced a centralized symbol definition layer for the calculator expression system.
+
+The calculator will no longer rely on display text or button labels as its internal representation.
+
+Instead, special calculator functions and constants will use dedicated internal symbols that are translated into user-facing display text when rendered.
+
+Changes
+
+Created a symbol registry responsible for defining calculator-specific symbols.
+
+The registry stores:
+
+Internal representation
+Display representation
+Symbol category/type
+
+Examples:
+
+Internal:
+
+§
+
+Display:
+
+log
+
+Internal:
+
+=
+
+Display:
+
+ANS
+
+The display representation is now separate from the expression storage format.
+
+Added Symbol Helpers
+
+Added shared helper methods for:
+
+Converting calculator actions into internal expression symbols
+Translating internal expression symbols into display text
+
+This allows different parts of the application to use the same symbol definitions.
+
+Current flow:
+
+Button Action
+
+      ↓
+
+Symbol Registry
+
+      ↓
+
+Internal Expression Symbol
+
+      ↓
+
+Display Translator
+
+      ↓
+
+User Display
+Design Decisions
+
+The internal expression format is optimized for program logic rather than human readability.
+
+The user should never need to interact with internal symbols directly.
+
+This approach allows future additions such as:
+
+Additional mathematical functions
+Trigonometric functions
+Absolute value
+Additional constants
+Answer references
+
+without changing the expression editor architecture.
+
+The expression editor continues to maintain a single source of truth.
+
+Example:
+
+Internal expression:
+
+12+§π
+
+Displayed expression:
+
+12+logπ
+Current Status
+
+Completed:
+
+String-based expression storage
+Cursor-based editing model
+Input normalization
+Calculator/UI separation
+Internal symbol registry
+Display symbol mappings
+
+Not yet implemented:
+
+Display rendering connection
+Visible cursor rendering
+Tokenizer
+Parser
+Evaluator
+Next Milestone
+
+Connect the expression state to the display layer.
+
+Goals:
+
+Render the current expression from calculator state
+Translate internal symbols into display text
+Render the cursor position through the display translator
+Complete the first functional expression editor loop
+
+------------------------------------------------------------------

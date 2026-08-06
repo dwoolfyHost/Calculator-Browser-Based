@@ -1,29 +1,31 @@
-// displayTranslator.js
-
-const symbols = {
-
-    "L": "log",
-
-    "N": "ln",
-
-    "P": "π",
-
-    "E": "e",
-
-    "R": "√"
-
-};
+import {
+    getDisplaySymbol
+} from "../symbols/symbols.js";
 
 
-function translate(expression) {
+function translate(expression, cursorPosition){
 
     let display = "";
 
 
-    for (const character of expression) {
+    for(let i = 0; i < expression.length; i++){
+
+        if(i === cursorPosition){
+
+            display += "|";
+
+        }
+
 
         display +=
-            symbols[character] ?? character;
+            getDisplaySymbol(expression[i]);
+
+    }
+
+
+    if(cursorPosition === expression.length){
+
+        display += "|";
 
     }
 

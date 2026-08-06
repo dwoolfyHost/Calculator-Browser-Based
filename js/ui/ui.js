@@ -2,13 +2,14 @@ class UI {
 
     constructor(calculator) {
 
-        this.calculator = calculator;
+const displayText =
+    translate(
+        state.expression,
+        state.cursor.position
+    );
 
-        this.expression =
-            document.getElementById("expression");
-
-        this.result =
-            document.getElementById("result");
+expressionElement.textContent =
+    displayText;
 
     }
 
@@ -27,6 +28,8 @@ class UI {
             state.result;
 
     }
+
+
 
 }
 

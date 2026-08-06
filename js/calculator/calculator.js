@@ -61,7 +61,9 @@ class Calculator {
                 break;
 
             default:
-                this.insert(action.value);
+                this.insert(
+                    getInternalSymbol(action.value)
+                );
                 break;
         }
 
