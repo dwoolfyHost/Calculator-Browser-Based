@@ -1,15 +1,17 @@
+import translate from "./displayTranslator.js";
+
+
 class UI {
 
     constructor(calculator) {
 
-const displayText =
-    translate(
-        state.expression,
-        state.cursor.position
-    );
+        this.calculator = calculator;
 
-expressionElement.textContent =
-    displayText;
+        this.expression =
+            document.getElementById("expression");
+
+        this.result =
+            document.getElementById("result");
 
     }
 
@@ -21,7 +23,10 @@ expressionElement.textContent =
 
 
         this.expression.textContent =
-            translate(state.expression);
+            translate(
+                state.expression,
+                state.cursor.position
+            );
 
 
         this.result.textContent =
@@ -29,8 +34,7 @@ expressionElement.textContent =
 
     }
 
-
-
 }
+
 
 export default UI;

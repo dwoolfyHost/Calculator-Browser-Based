@@ -6,7 +6,7 @@
 // It receives actions and modifies its internal state.
 
 
-import { Token, TokenType } from "../parser/token.js";
+import { getInternalSymbol } from "../symbols/symbols.js";
 
 
 class Calculator {
@@ -57,7 +57,13 @@ class Calculator {
                 break;
 
             case "ANS":
-                console.log("Answer insertion not implemented");
+                if(this.state.answer !== null){
+
+                    this.insert(
+                        getInternalSymbol("ANS")
+                    );
+
+                }
                 break;
 
             default:
@@ -72,14 +78,21 @@ class Calculator {
 
     insert(value) {
 
-        const expression = this.state.expression;
-        const position = this.state.cursor.position;
+        const before =
+            this.state.expression.slice(
+                0,
+                this.state.cursor.position
+            );
+
+
+        const after =
+            this.state.expression.slice(
+                this.state.cursor.position
+            );
 
 
         this.state.expression =
-            expression.slice(0, position) +
-            value +
-            expression.slice(position);
+            before + value + after;
 
 
         this.state.cursor.position++;
@@ -88,7 +101,7 @@ class Calculator {
 
     moveLeft() {
 
-            f(this.state.cursor.position > 0){
+            if(this.state.cursor.position > 0){
 
             this.state.cursor.position--;
 

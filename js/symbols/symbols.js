@@ -40,7 +40,7 @@ const Symbols = {
 
 function getInternalSymbol(actionName) {
 
-    return Symbols[action]?.internal ?? action;
+    return Symbols[actionName]?.internal ?? actionName;
 
 }
 
