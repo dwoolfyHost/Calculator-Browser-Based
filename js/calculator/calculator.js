@@ -56,12 +56,17 @@ class Calculator {
                 this.evaluate();
                 break;
 
+            case "ANS":
+                console.log("Answer insertion not implemented");
+                break;
+
             default:
                 this.insert(action.value);
                 break;
         }
 
     }
+
 
     insert(value) {
 

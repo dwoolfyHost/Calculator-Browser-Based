@@ -1,25 +1,30 @@
 class UI {
 
-    constructor(calculator){
+    constructor(calculator) {
 
         this.calculator = calculator;
 
-        this.expressionDisplay =
+        this.expression =
             document.getElementById("expression");
 
-        this.resultDisplay =
+        this.result =
             document.getElementById("result");
 
     }
 
 
-    render(){
+    update() {
 
-        this.expressionDisplay.textContent =
-            this.calculator.expression.join("");
+        const state =
+            this.calculator.state;
 
-        this.resultDisplay.textContent =
-            this.calculator.result;
+
+        this.expression.textContent =
+            translate(state.expression);
+
+
+        this.result.textContent =
+            state.result;
 
     }
 

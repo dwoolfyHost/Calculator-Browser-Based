@@ -411,3 +411,119 @@ Create parser responsible for interpreting token structure
 Prepare evaluator layer for mathematical execution
 
 ------------------------------------------------------------------
+
+Milestone 07 — Application Flow Cleanup and Display Preparation
+Summary
+
+Completed additional cleanup following the transition to the string-based expression editor architecture.
+
+The calculator is now separated more clearly into three responsibilities:
+
+Input handling
+Calculator state management
+User interface rendering
+
+This milestone prepares the project for implementing the expression display translation layer.
+
+Changes
+HTML Cleanup
+
+Removed the duplicate JavaScript module initialization.
+
+The application now loads a single instance of main.js, preventing duplicate initialization of calculator components.
+
+Calculator Action Handling
+
+Refined calculator action handling to better match the new expression editor architecture.
+
+Changes include:
+
+Removed UI update responsibility from the calculator state manager
+Kept calculator logic focused on modifying internal state
+Added placeholder handling for the future ANS action
+
+The calculator no longer directly depends on UI behavior.
+
+Input Layer
+
+Confirmed the input layer remains responsible for coordinating external actions.
+
+Current flow:
+
+Mouse / Keyboard Input
+
+        ↓
+
+Input Normalizer
+
+        ↓
+
+Calculator Action Handler
+
+        ↓
+
+Calculator State Update
+
+        ↓
+
+UI Refresh
+
+Input sources continue to be unified before reaching calculator logic.
+
+Interface Changes
+
+Replaced the previous unused percent control with an ANS control.
+
+The ANS feature is planned to insert the previous successful calculation result at the current cursor position.
+
+The action has been reserved but evaluation and answer insertion logic will be implemented later.
+
+Design Decisions
+
+The calculator continues to maintain a single internal expression representation.
+
+Example:
+
+12+L(P)
+
+The expression editor does not store display formatting such as:
+
+12+log(π)
+
+Display conversion will be handled by a separate translation layer.
+
+This keeps:
+
+Editing logic independent from presentation
+Parsing logic independent from UI formatting
+Internal symbols stable regardless of display choices
+Current Status
+
+Completed:
+
+String-based calculator state
+Cursor state storage
+Expression editing methods
+Input normalization
+Separation of calculator and UI responsibilities
+Preparation for display translation
+
+Not yet implemented:
+
+Display translator
+Expression rendering from calculator state
+Display cursor mapping
+Tokenizer
+Parser
+Evaluator
+Next Milestone
+
+Implement the display translation layer.
+
+Goals:
+
+Translate internal symbols into user-facing calculator notation
+Connect calculator expression state to the expression display
+Begin rendering the editable expression in the UI
+
+------------------------------------------------------------------

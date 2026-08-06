@@ -132,7 +132,9 @@ translateKey(event){
 
     handleAction(action){
 
-        console.log(action);
+        this.calculator.handleAction(action);
+
+        this.ui.update();
 
     }
 
