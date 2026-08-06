@@ -8,6 +8,7 @@
 
 import { getInternalSymbol } from "../symbols/symbols.js";
 
+import Tokenizer from "../parser/tokenizer.js";
 
 class Calculator {
 

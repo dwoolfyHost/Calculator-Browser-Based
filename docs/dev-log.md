@@ -918,3 +918,77 @@ Recognize functions and constants
 Detect invalid token sequences
 
 ------------------------------------------------------------------
+
+## 2026-08-06 - Tokenizer Implementation
+
+The expression editor pipeline has been extended with the first stage of expression processing.
+
+### Changes
+
+Implemented the initial tokenizer system.
+
+The tokenizer now converts the internal expression string into parser-ready token objects.
+
+Examples:
+
+Internal expression:
+
+12+L(5)
+
+Becomes:
+
+NUMBER("12")
+OPERATOR("+")
+FUNCTION("L")
+PARENTHESIS("(")
+NUMBER("5")
+PARENTHESIS(")")
+
+### Design Decisions
+
+The tokenizer operates only on the internal expression representation.
+
+It does not:
+
+- evaluate expressions
+- determine order of operations
+- validate mathematical correctness
+- modify calculator state
+
+Its only responsibility is identifying individual expression components.
+
+Whitespace handling was removed because the expression editor does not generate whitespace and the internal expression format does not require normalization.
+
+### Architecture Update
+
+Current evaluation pipeline:
+
+Expression String
+        ↓
+Tokenizer
+        ↓
+Token Stream
+        ↓
+Parser / Expression Processor
+        ↓
+Evaluator
+
+### Current Status
+
+The calculator can now successfully transform an edited expression string into token objects.
+
+Evaluation is not implemented yet.
+
+### Next Milestone
+
+Implement the expression processor/parser.
+
+Goals:
+
+- Apply mathematical precedence
+- Resolve parentheses
+- Resolve function boundaries
+- Prepare ordered expressions for evaluation
+- Add structural expression error handling
+
+------------------------------------------------------------------
