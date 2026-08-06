@@ -1,6 +1,6 @@
-import Calculator from "./calculator.js";
-import UI from "./ui.js";
-import Input from "./input.js";
+import Calculator from "./calculator/calculator.js";
+import UI from "./ui/ui.js";
+import Input from "./input/input.js";
 
 
 const calculator = new Calculator();

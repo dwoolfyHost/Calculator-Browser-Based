@@ -271,3 +271,143 @@ Next Steps
 Connect normalized actions to the calculator state manager.
 Begin implementing expression editing using the token-based expression model.
 Update the expression and result displays from calculator state rather than console output.
+
+------------------------------------------------------------------
+
+2026-08-06  -  Milestone 06 — String-Based Expression Editor Refactor
+Summary
+
+Completed the first major architectural refactor from the original token-editing model to a string-based expression editor.
+
+The calculator no longer treats tokens as the editable representation of the current expression. Instead, the calculator maintains a single internal expression string with an independent cursor position.
+
+This establishes the foundation for separating expression editing from parsing and evaluation.
+
+Changes
+
+Replaced the previous calculator state model:
+
+Previous:
+
+Token array storage
+Token-based cursor positioning
+Direct token creation during input
+
+New:
+
+Expression string storage
+Integer cursor position tracking
+Character/symbol insertion at cursor location
+
+The calculator state now follows the model:
+
+{
+    expression: "",
+
+    cursor: {
+        position: 0
+    },
+
+    result: "0",
+
+    answer: null,
+
+    error: null
+}
+
+Implemented expression editor operations:
+
+Insert characters/symbols at the cursor position
+Move cursor left
+Move cursor right
+Delete the character before the cursor
+Clear the current expression
+Design Decisions
+
+The calculator editor is now completely independent from mathematical interpretation.
+
+The editor is responsible only for:
+
+Maintaining the current expression
+Tracking cursor position
+Modifying expression contents
+
+It does not know:
+
+What a number is
+What a function does
+Operator precedence
+How expressions are evaluated
+
+Those responsibilities will be handled later by the parser subsystem.
+
+The new data flow is:
+
+Input
+
+↓
+
+Calculator Action Handler
+
+↓
+
+Expression State
+
+↓
+
+Display Renderer
+
+↓
+
+Future Parser/Evaluator
+
+Architecture Direction
+
+The project will now maintain separate representations for separate responsibilities:
+
+Internal Expression:
+
+12+L(24)
+
+Display Translation:
+
+12+log(24)
+
+Parser Input:
+
+Tokenized expression data
+
+The internal expression string remains the single source of truth.
+
+Current Status
+
+The calculator can now function as an editable expression container.
+
+Implemented:
+
+String-based expression storage
+Cursor state management
+Expression insertion
+Expression deletion
+Cursor movement
+Expression clearing
+
+Not yet implemented:
+
+Display translation
+Tokenizer
+Parser
+Evaluator
+Result handling
+Next Milestone
+
+Create the separated parser subsystem.
+
+Initial goals:
+
+Move token definitions into the parser module
+Create tokenizer responsible for converting expression strings into tokens
+Create parser responsible for interpreting token structure
+Prepare evaluator layer for mathematical execution
+
+------------------------------------------------------------------
