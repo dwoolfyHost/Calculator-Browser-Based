@@ -9,13 +9,17 @@ const TokenType = {
 
     OPERATOR: "OPERATOR",
 
+    UNARY: "UNARY",
+
     FUNCTION: "FUNCTION",
 
     CONSTANT: "CONSTANT",
 
-    ANSWER: "ANSWER",
+    LEFT_PAREN: "LEFT_PAREN",
 
-    PARENTHESIS: "PARENTHESIS"
+    RIGHT_PAREN: "RIGHT_PAREN",
+
+    ANSWER: "ANSWER"
 
 };
 

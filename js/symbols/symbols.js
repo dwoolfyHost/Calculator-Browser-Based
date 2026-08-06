@@ -34,6 +34,12 @@ const Symbols = {
         internal: "=",
         display: "ANS",
         type: "CONSTANT"
+    },
+
+    POWER: {
+        internal: "^",
+        display: "^",
+        type: "OPERATOR"
     }
 
 };

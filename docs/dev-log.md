@@ -992,3 +992,107 @@ Goals:
 - Add structural expression error handling
 
 ------------------------------------------------------------------
+
+Validator Pipeline and Evaluator Foundation
+
+The expression processing pipeline has been expanded beyond token generation with the introduction of validation and evaluation preparation.
+
+Changes
+
+Implemented the initial validator framework.
+
+The validator now acts as the boundary between tokenizer output and expression evaluation.
+
+Its responsibilities are:
+
+Validate expression structure
+Normalize ambiguous operators
+Prepare tokens for evaluation
+Attach evaluation metadata
+
+Initial validator systems include:
+
+Parenthesis balance checking
+Unary operator resolution
+Operator grammar definitions
+Precedence and associativity framework
+Implicit multiplication handling structure
+Token sequence validation framework
+Design Decisions
+
+The expression processor approach was simplified.
+
+Instead of constructing nested expression groups, the processing pipeline will operate on a normalized token stream.
+
+The validator prepares the expression by transforming ambiguous syntax into explicit operations.
+
+Examples:
+
+5*-2
+
+becomes:
+
+NUMBER(5)
+OPERATOR(*)
+UNARY(-)
+NUMBER(2)
+
+This allows the evaluator to focus only on execution rather than interpreting expression grammar.
+
+Architecture Update
+
+Current evaluation pipeline:
+
+Expression String
+        ↓
+Tokenizer
+        ↓
+Raw Token Stream
+        ↓
+Validator
+        ↓
+Validated Token Stream
+        ↓
+Evaluator
+        ↓
+Result
+Evaluator Foundation
+
+Created the initial evaluator structure.
+
+The evaluator will receive only validated token streams.
+
+Its responsibilities will be:
+
+Execute operations in the order provided
+Resolve mathematical functions
+Produce final results
+Return evaluation failures to the calculator display layer
+
+The evaluator will not:
+
+Validate syntax
+Determine whether expressions are structurally valid
+Interpret ambiguous operators
+Current Status
+
+The calculator can now:
+
+Convert expressions into token objects
+Begin validating expression structure
+Prepare tokens for evaluation
+
+Full evaluation is not implemented yet.
+
+Next Milestone
+
+Complete validator implementation.
+
+Remaining goals:
+
+Finish token sequence validation
+Complete implicit multiplication insertion
+Finalize operator metadata assignment
+Connect validator output to evaluator
+
+------------------------------------------------------------------
