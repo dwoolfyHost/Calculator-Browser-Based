@@ -786,3 +786,135 @@ Implement mathematical grammar
 Build parsing structure for evaluation
 
 ------------------------------------------------------------------
+
+Milestone 11 — Parser Token Foundation
+Summary
+
+Created the foundation of the parser subsystem by replacing the previous editor-oriented token model with a parser-oriented token representation.
+
+Tokens are no longer used for storing or modifying expressions. The expression editor continues to use a single internal expression string, while tokens are now reserved for parsing and evaluation.
+
+Changes
+
+Added parser token structure:
+
+parser/
+
+├── token.js
+├── tokenTypes.js
+├── tokenizer.js
+└── parser.js
+
+Implemented:
+
+New token object structure
+Token type definitions
+Separation between expression editing and mathematical parsing
+Token Design
+
+Tokens now represent individual meaningful pieces of an expression.
+
+Token structure:
+
+Token {
+
+    type,
+
+    value
+
+}
+
+Examples:
+
+NUMBER("12.5")
+
+OPERATOR("+")
+
+FUNCTION("L")
+
+CONSTANT("P")
+
+ANSWER("=")
+
+PARENTHESIS("(")
+
+The token value preserves the internal calculator representation.
+
+The parser subsystem will interpret these internal symbols later.
+
+Design Decisions
+
+The tokenizer will not normalize values during token creation.
+
+Examples:
+
+.5
+
+remains:
+
+NUMBER(".5")
+
+rather than being converted into:
+
+NUMBER("0.5")
+
+Formatting and numerical conversion belong to later stages of evaluation.
+
+The tokenizer's responsibility is only to group expression characters into meaningful tokens.
+
+Architecture Update
+
+The processing pipeline is now:
+
+Expression String
+
+        ↓
+
+Tokenizer
+
+        ↓
+
+Token Array
+
+        ↓
+
+Parser
+
+        ↓
+
+Evaluator
+
+        ↓
+
+Result
+
+The editor and parser systems are now fully separated.
+
+Current Status
+
+Completed:
+
+Expression editor
+Display translation
+Internal symbol system
+Parser token foundation
+
+Remaining parser work:
+
+Tokenizer implementation
+Grammar and parsing logic
+Parser error handling
+Evaluation engine
+Next Milestone
+
+Implement the tokenizer.
+
+Goals:
+
+Convert expression strings into token arrays
+Group contiguous numbers
+Recognize operators
+Recognize functions and constants
+Detect invalid token sequences
+
+------------------------------------------------------------------
