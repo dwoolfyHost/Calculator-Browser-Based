@@ -1,5 +1,62 @@
 const Symbols = {
 
+    ADD: {
+        internal: "+",
+        display: "+",
+        type: "OPERATOR",
+        precedence: 1,
+        associativity: "LEFT"
+    },
+
+    SUBTRACT: {
+        internal: "-",
+        display: "-",
+        type: "OPERATOR",
+        precedence: 1,
+        associativity: "LEFT"
+    },
+
+    NEGATE: {
+        internal: "~",
+        display: "-",
+        type: "UNARY",
+        precedence: 2,
+        associativity: "RIGHT",
+        operation: "NEGATE"
+    },
+
+    MULTIPLY: {
+        internal: "*",
+        display: "×",
+        type: "OPERATOR",
+        precedence: 2,
+        associativity: "LEFT"
+    },
+
+    DIVIDE: {
+        internal: "/",
+        display: "÷",
+        type: "OPERATOR",
+        precedence: 2,
+        associativity: "LEFT"
+    },
+
+    POWER: {
+        internal: "^",
+        display: "^",
+        type: "OPERATOR",
+        precedence: 3,
+        associativity: "RIGHT"
+    },
+
+    ROOT: {
+        internal: "√",
+        display: "√",
+        type: "OPERATOR",
+        precedence: 3,
+        associativity: "RIGHT"
+    },
+
     LOG: {
         internal: "§",
         display: "log",
@@ -10,6 +67,18 @@ const Symbols = {
         internal: "∆",
         display: "ln",
         type: "FUNCTION"
+    },
+
+    LEFT_PAREN: {
+        internal: "(",
+        display: "(",
+        type: "LEFT_PAREN"
+    },
+
+    RIGHT_PAREN: {
+        internal: ")",
+        display: ")",
+        type: "RIGHT_PAREN"
     },
 
     PI: {
@@ -24,22 +93,10 @@ const Symbols = {
         type: "CONSTANT"
     },
 
-    ROOT: {
-        internal: "√",
-        display: "√",
-        type: "OPERATOR"
-    },
-
     ANS: {
         internal: "=",
         display: "ANS",
         type: "CONSTANT"
-    },
-
-    POWER: {
-        internal: "^",
-        display: "^",
-        type: "OPERATOR"
     }
 
 };
@@ -69,11 +126,19 @@ function getDisplaySymbol(symbol) {
 
 }
 
+function getSymbol(value){
 
+    return Object.values(Symbols).find(
+        symbol => symbol.internal === value
+    );
+
+}
 
 export {
 
     Symbols,
+
+    getSymbol,
 
     getInternalSymbol,
 

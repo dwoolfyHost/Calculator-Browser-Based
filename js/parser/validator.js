@@ -7,56 +7,7 @@
 
 import Token from "./token.js";
 import TokenType from "./tokenTypes.js";
-import Symbols from "../symbols/symbols.js";
-
-
-const Grammar = {
-
-    unaryOperators: {
-
-        "-": {
-            precedence: 2,
-            associativity: "RIGHT"
-        }
-
-    },
-
-
-    binaryOperators: {
-
-        "+": {
-            precedence: 1,
-            associativity: "LEFT"
-        },
-
-        "-": {
-            precedence: 1,
-            associativity: "LEFT"
-        },
-
-        "*": {
-            precedence: 2,
-            associativity: "LEFT"
-        },
-
-        "/": {
-            precedence: 2,
-            associativity: "LEFT"
-        },
-
-        "^": {
-            precedence: 3,
-            associativity: "RIGHT"
-        },
-
-        "R": {
-            precedence: 3,
-            associativity: "RIGHT"
-        }
-
-    }
-
-};
+import { Symbols } from "../symbols/symbols.js";
 
 
 class Validator {
@@ -69,6 +20,7 @@ class Validator {
         this.validatedTokens = [];
 
     }
+
 
 
     validate(){
@@ -85,12 +37,11 @@ class Validator {
 
         this.checkTokenSequence();
 
-        this.assignOperatorMetadata();
-
 
         return this.validatedTokens;
 
     }
+
 
 
     checkParentheses(){
@@ -136,6 +87,7 @@ class Validator {
     }
 
 
+
     resolveUnaryOperators(){
 
         for(
@@ -160,17 +112,17 @@ class Validator {
 
             if(this.isUnaryPosition(i)){
 
-                token.type =
-                    TokenType.UNARY;
-
-                token.operation =
-                    "NEGATE";
+                Object.assign(
+                    token,
+                    Symbols.NEGATE
+                );
 
             }
 
         }
 
     }
+
 
 
     isUnaryPosition(index){
@@ -193,6 +145,7 @@ class Validator {
         );
 
     }
+
 
 
     resolveImplicitMultiplication(){
@@ -239,50 +192,25 @@ class Validator {
     }
 
 
-    assignOperatorMetadata(){
 
-        for(const token of this.validatedTokens){
+    requiresImplicitMultiply(current,next){
 
-            if(token.type === TokenType.OPERATOR){
+        return (
 
-                const info =
-                    Grammar.binaryOperators[token.value];
+            this.isValue(current)
 
+            &&
 
-                if(info){
+            (
+                next.type === TokenType.LEFT_PAREN ||
+                next.type === TokenType.FUNCTION ||
+                next.type === TokenType.CONSTANT
+            )
 
-                    token.precedence =
-                        info.precedence;
-
-                    token.associativity =
-                        info.associativity;
-
-                }
-
-            }
-
-
-            else if(token.type === TokenType.UNARY){
-
-                const info =
-                    Grammar.unaryOperators[token.value];
-
-
-                if(info){
-
-                    token.precedence =
-                        info.precedence;
-
-                    token.associativity =
-                        info.associativity;
-
-                }
-
-            }
-
-        }
+        );
 
     }
+
 
 
     checkTokenSequence(){
@@ -303,7 +231,8 @@ class Validator {
 
                 else if(
                     token.type === TokenType.UNARY ||
-                    token.type === TokenType.LEFT_PAREN
+                    token.type === TokenType.LEFT_PAREN ||
+                    token.type === TokenType.FUNCTION
                 ){
 
                     expectsValue = true;
@@ -360,6 +289,38 @@ class Validator {
             );
 
         }
+
+    }
+
+
+
+    isValue(token){
+
+        return (
+            token.type === TokenType.NUMBER ||
+            token.type === TokenType.CONSTANT
+        );
+
+    }
+
+
+
+    isOperator(token){
+
+        return (
+            token.type === TokenType.OPERATOR
+        );
+
+    }
+
+
+
+    createMultiplyToken(){
+
+        return new Token(
+            TokenType.OPERATOR,
+            "*"
+        );
 
     }
 

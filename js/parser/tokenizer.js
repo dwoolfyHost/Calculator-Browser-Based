@@ -8,7 +8,11 @@
 
 import Token from "./token.js";
 import TokenType from "./tokenTypes.js";
-import { Symbols } from "../symbols/symbols.js";
+
+import {
+    getSymbol
+} from "../symbols/symbols.js";
+
 
 class Tokenizer {
 
@@ -27,72 +31,56 @@ class Tokenizer {
 
     tokenize(){
 
-        while(this.position < this.expression.length){
+        while(
+            this.position < this.expression.length
+        ){
 
             const character =
                 this.expression[this.position];
 
 
-
-
-
-            if(this.isNumberStart(character)){
+            if(
+                this.isNumberStart(character)
+            ){
 
                 this.tokens.push(
                     this.readNumber()
                 );
 
+                continue;
+
             }
 
 
-            else if(this.isOperator(character)){
+            const symbol =
+                getSymbol(character);
+
+
+            if(symbol){
 
                 this.tokens.push(
+
                     new Token(
-                        TokenType.OPERATOR,
-                        character
+                        symbol.type,
+                        symbol.internal
                     )
+
                 );
 
                 this.position++;
 
-            }
-
-
-            else if(this.isParenthesis(character)){
-
-                this.tokens.push(
-                    new Token(
-                        TokenType.PARENTHESIS,
-                        character
-                    )
-                );
-
-                this.position++;
+                continue;
 
             }
 
 
-            else if(this.isSymbol(character)){
-
-                this.tokens.push(
-                    this.readSymbol()
-                );
-
-            }
-
-
-            else {
-
-                throw new Error(
-                    `Unknown character: ${character}`
-                );
-
-            }
+            throw new Error(
+                `Unknown character: ${character}`
+            );
 
         }
 
-        
+
         return this.tokens;
 
     }
@@ -107,7 +95,8 @@ class Tokenizer {
 
 
         while(
-            this.position < this.expression.length
+            this.position <
+            this.expression.length
         ){
 
             const character =
@@ -128,7 +117,9 @@ class Tokenizer {
 
             }
 
-            else if(!this.isDigit(character)){
+            else if(
+                !this.isDigit(character)
+            ){
 
                 break;
 
@@ -143,42 +134,11 @@ class Tokenizer {
 
 
         return new Token(
+
             TokenType.NUMBER,
-            value
-        );
 
-    }
+            Number(value)
 
-
-
-    readSymbol(){
-
-        const symbol =
-            this.expression[this.position];
-
-
-        this.position++;
-
-
-        const symbolDefinition =
-            Object.values(Symbols)
-                .find(entry =>
-                    entry.internal === symbol
-                );
-
-
-        if(!symbolDefinition){
-
-            throw new Error(
-                `Unknown symbol: ${symbol}`
-            );
-
-        }
-
-
-        return new Token(
-            symbolDefinition.type,
-            symbolDefinition.internal
         );
 
     }
@@ -196,39 +156,14 @@ class Tokenizer {
     isNumberStart(character){
 
         return (
+
             this.isDigit(character) ||
+
             character === "."
+
         );
 
     }
-
-
-
-    isOperator(character){
-
-        return "+-*/^%".includes(character);
-
-    }
-
-
-
-    isParenthesis(character){
-
-        return "()".includes(character);
-
-    }
-
-
-
-    isSymbol(character){
-
-        return Object.values(Symbols)
-            .some(entry =>
-                entry.internal === character
-            );
-
-    }
-
 
 
 }

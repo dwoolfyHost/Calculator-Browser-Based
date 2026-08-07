@@ -1,26 +1,40 @@
-evaluation.js
+// evaluation.js
+//
+// Reduces validated token streams into a final result.
+// Handles order of operations and mathematical execution.
 
+import Token from "./token.js";
+import TokenType from "./tokenTypes.js";
 
 class Evaluation {
+
+    constructor(answer){
+
+        this.answer = answer;
+        this.tokens = [];
+
+    }
 
 
     // =========================
     // Entry Point
     // =========================
 
-    evaluate(tokens) {
+    evaluate(tokens){
 
         this.tokens = [...tokens];
 
-        while(!this.isComplete()) {
+        this.resolveConstants();
+
+        while(!this.isComplete()){
+
+            this.collapseScopes();
 
             const operation =
                 this.findNextOperation();
 
-
             const result =
-                this.resolveOperation(operation);
-
+                this.resolveReduction(operation);
 
             this.replaceOperation(
                 operation,
@@ -29,135 +43,421 @@ class Evaluation {
 
         }
 
-
         return this.tokens[0];
 
     }
-
 
 
     // =========================
     // Reduction / Order of Operations
     // =========================
 
-    findNextOperation() {
+    findNextOperation(){
 
-        // locate highest precedence operation
-        // return the token range to resolve
-
-    }
-
-
-    replaceOperation(operation, result) {
-
-        // replace processed tokens
-        // with one result token
+        return this.findOperationInScope(
+            this.findActiveScope()
+        );
 
     }
 
 
-    isComplete() {
+    findActiveScope(){
 
-        return this.tokens.length === 1;
+        let start = -1;
+
+        for(
+            let i = 0;
+            i < this.tokens.length;
+            i++
+        ){
+
+            const token =
+                this.tokens[i];
+
+            if(token.type === TokenType.LEFT_PAREN){
+
+                start = i;
+
+            }
+
+            else if(
+                token.type === TokenType.RIGHT_PAREN &&
+                start !== -1
+            ){
+
+                return {
+
+                    start: start + 1,
+
+                    end: i - 1
+
+                };
+
+            }
+
+        }
+
+        return {
+
+            start: 0,
+
+            end: this.tokens.length - 1
+
+        };
 
     }
 
+
+    findOperationInScope(scope){
+
+        let best = null;
+
+        for(
+            let i = scope.start;
+            i <= scope.end;
+            i++
+        ){
+
+            const token =
+                this.tokens[i];
+
+            if(
+                token.type === TokenType.FUNCTION ||
+                token.type === TokenType.UNARY
+            ){
+
+                return {
+
+                    index: i,
+
+                    token
+
+                };
+
+            }
+
+            if(!this.isOperator(token)){
+
+                continue;
+
+            }
+
+            if(
+                best === null ||
+                this.getPrecedence(token) >
+                this.getPrecedence(best.token)
+            ){
+
+                best = {
+
+                    index: i,
+
+                    token
+
+                };
+
+            }
+
+        }
+
+        return best;
+
+    }
+
+
+    collapseScopes(){
+
+        for(
+            let i = 0;
+            i < this.tokens.length - 2;
+            i++
+        ){
+
+            const current =
+                this.tokens[i];
+
+            const middle =
+                this.tokens[i + 1];
+
+            const next =
+                this.tokens[i + 2];
+
+            if(
+
+                current.type === TokenType.LEFT_PAREN &&
+
+                this.isValue(middle) &&
+
+                next.type === TokenType.RIGHT_PAREN
+
+            ){
+
+                this.tokens.splice(
+                    i,
+                    3,
+                    middle
+                );
+
+                i--;
+
+            }
+
+        }
+
+    }
+
+
+    replaceOperation(operation, result){
+
+        const range =
+            this.getReductionRange(operation);
+
+        this.tokens.splice(
+
+            range.start,
+
+            range.end - range.start + 1,
+
+            result
+
+        );
+
+    }
+
+
+    isComplete(){
+
+        return (
+
+            this.tokens.length === 1 &&
+
+            this.isValue(this.tokens[0])
+
+        );
+
+    }
 
 
     // =========================
     // Operation Resolution
     // =========================
 
-    resolveOperation(operation) {
+    resolveBinary(operation){
 
-        // determine operation type
-        // send to correct math function
+        const left =
+            this.tokens[operation.index - 1];
+
+        const right =
+            this.tokens[operation.index + 1];
+
+        switch(operation.token.value){
+
+            case "+":
+                return this.createValueToken(left.value + right.value);
+
+            case "-":
+                return this.createValueToken(left.value - right.value);
+
+            case "*":
+                return this.createValueToken(left.value * right.value);
+
+            case "/":
+                return this.createValueToken(left.value / right.value);
+
+            case "^":
+                return this.createValueToken(left.value ** right.value);
+
+            case "√":
+                return this.createValueToken(
+                    Math.pow(left.value, 1 / right.value)
+                );
+
+        }
 
     }
 
+
+    resolveFunction(operation, argument){
+
+        switch(operation.token.internal){
+
+            case "∆":
+                return this.createValueToken(
+                    Math.log(argument.value)
+                );
+
+            case "§":
+                return this.createValueToken(
+                    Math.log10(argument.value)
+                );
+
+        }
+
+    }
+
+
+    resolveUnary(operator, value){
+
+        switch(operator.operation){
+
+            case "NEGATE":
+
+                return this.createValueToken(
+                    -value.value
+                );
+
+        }
+
+    }
+
+
+    resolveReduction(operation){
+
+        switch(operation.token.type){
+
+            case TokenType.OPERATOR:
+                return this.resolveBinary(operation);
+
+            case TokenType.UNARY:
+            case TokenType.FUNCTION:
+                return this.resolvePrefix(operation);
+
+        }
+
+    }
+
+
+    resolvePrefix(operation){
+
+        const value =
+            this.tokens[operation.index + 1];
+
+        switch(operation.token.type){
+
+            case TokenType.UNARY:
+                return this.resolveUnary(
+                    operation.token,
+                    value
+                );
+
+            case TokenType.FUNCTION:
+                return this.resolveFunction(
+                    operation,
+                    value
+                );
+
+        }
+
+    }
 
 
     // =========================
-    // Mathematical Operations
+    // Constants
     // =========================
 
-    add(a,b) {
+    resolveConstants(){
 
-        return a + b;
+        for(
+            let i = 0;
+            i < this.tokens.length;
+            i++
+        ){
 
-    }
+            if(
+                this.tokens[i].type === TokenType.CONSTANT
+            ){
 
+                this.tokens[i] =
+                    this.createValueToken(
+                        this.resolveConstant(
+                            this.tokens[i]
+                        )
+                    );
 
-    subtract(a,b) {
+            }
 
-        return a - b;
-
-    }
-
-
-    multiply(a,b) {
-
-        return a * b;
-
-    }
-
-
-    divide(a,b) {
-
-        return a / b;
+        }
 
     }
 
 
-    power(a,b) {
+    resolveConstant(token){
 
-        return a ** b;
+        switch(token.value){
 
-    }
+            case "π":
+                return Math.PI;
 
+            case "€":
+                return Math.E;
 
-    root(a,b) {
+            case "=":
+                return this.answer;
 
-        return Math.pow(a,1/b);
-
-    }
-
-
-    logarithm(a,b) {
-
-        return Math.log(a) / Math.log(b);
+        }
 
     }
-
-
-    naturalLog(a) {
-
-        return Math.log(a);
-
-    }
-
 
 
     // =========================
-    // Helpers / Validation Support
+    // Helpers
     // =========================
 
-    isValue(token) {
+    getReductionRange(operation){
+
+        if(operation.token.type === TokenType.OPERATOR){
+
+            return {
+
+                start: operation.index - 1,
+
+                end: operation.index + 1
+
+            };
+
+        }
+
+        return {
+
+            start: operation.index,
+
+            end: operation.index + 1
+
+        };
 
     }
 
 
-    isOperator(token) {
+    createValueToken(value){
+
+        return new Token(
+            TokenType.NUMBER,
+            value
+        );
 
     }
 
 
-    getPrecedence(token) {
+    isValue(token){
+
+        return token.type === TokenType.NUMBER;
 
     }
 
+
+    isOperator(token){
+
+        return token.type === TokenType.OPERATOR;
+
+    }
+
+
+    getPrecedence(token){
+
+        return token.precedence ?? -1;
+
+    }
 
 }
-
 
 export default Evaluation;
